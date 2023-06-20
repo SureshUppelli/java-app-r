@@ -1,0 +1,245 @@
+
+package com.abcbs.benefitsx12utilities.services;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
+
+import com.abcbs.benefitsedix12objects.models.Edi270_271;
+import com.abcbs.benefitsedix12objects.models.ST;
+import com.abcbs.claimsloggingframework.CustomExceptionHandler;
+import com.abcbs.claimsloggingframework.exceptions.ApplicationException;
+
+import io.xlate.edi.stream.EDIInputFactory;
+import io.xlate.edi.stream.EDIStreamEvent;
+import io.xlate.edi.stream.EDIStreamReader;
+
+/**
+ * 
+ * 
+ * @author	SXM
+ * @version	1.0
+ * @since	8-18-2022
+ * @contact	ismbbbillingsys@arkbluecross.com
+ * 
+ *          Service class containing parser for raw x12. Use of this class
+ *          requires the import of edix12objects.jar from Maven.
+ */
+/*
+ * Document modifications here:
+ */
+@Service
+public class BenefitsEdiHandler {
+
+	@Autowired
+	private Environment env;
+
+	@Autowired
+	private BenefitsEdiMapper mapper;
+
+	/**
+	 * Parsing method accepts raw x12 as string. An object is populated from the x12
+	 * loops and segments following current edi structure standards. This parser
+	 * uses the StAEDI API to allow for x12 parsing that follows a pull processing
+	 * flow similar the StAX. For more details see:
+	 * 
+	 * https://github.com/xlate/staedi
+	 * 
+	 * @param edi
+	 * @return
+	 * @throws IOException
+	 */
+	public Edi270_271 parse270Edi(String edi) throws IOException {
+		Edi270_271 edi270 = new Edi270_271();
+		EDIInputFactory factory = EDIInputFactory.newFactory();
+		factory.setProperty(EDIInputFactory.EDI_VALIDATE_CONTROL_CODE_VALUES, false);
+		InputStream stream = new ByteArrayInputStream(edi.getBytes());
+		EDIStreamReader reader = factory.createEDIStreamReader(stream);
+		EDIStreamEvent event;
+		String currentsegment = "";
+		String currentdata = "";
+		String currentloop = "";
+		List<String> datalist = new ArrayList<String>();
+		List<String> compositelist = new ArrayList<String>();
+		ST currentst = new ST();
+		int hlcounter = 0;
+		int stcounter = 0;
+		int svccounter = 0;
+		boolean svccomposite = false;
+
+		try {
+
+			while (reader.hasNext()) {
+				switch (reader.next()) {
+				case START_INTERCHANGE:
+					String standard = reader.getStandard();
+					String[] version = reader.getVersion();
+					break;
+				case START_SEGMENT:
+					currentsegment = reader.getText();
+					if (currentsegment.equals("HL")) {
+						hlcounter++;
+						currentloop = getLoop(hlcounter);
+					}
+					if (currentsegment.equals("ST")) {
+						stcounter++;
+						currentst = new ST();
+					}
+					if (currentsegment.equals("SE"))
+						hlcounter = 0;
+					if (currentsegment.equals("SVC")) {
+						svccounter++;
+						currentloop = "Loop2110C";
+					}
+					datalist = new ArrayList<String>();
+					break;
+				case END_SEGMENT:
+					edi270 = updateSegment(edi270, stcounter, svccounter, hlcounter, currentsegment, datalist,
+							compositelist, currentloop, currentst);
+					break;
+				case START_COMPOSITE:
+					if (currentsegment.equals("SVC")) {
+						compositelist = new ArrayList<String>();
+						svccomposite = true;
+					}
+					break;
+				case END_COMPOSITE:
+					if (currentsegment.equals("SVC"))
+						svccomposite = false;
+					break;
+				case ELEMENT_DATA:
+					currentdata = reader.getText();
+
+					if (currentsegment.equals("SVC")) {
+						if (svccomposite)
+							compositelist.add(currentdata);
+						else
+							datalist.add(currentdata);
+					} else
+						datalist.add(currentdata);
+					break;
+				}
+			}
+
+			reader.close();
+			stream.close();
+		} catch (Exception ex) {
+			CustomExceptionHandler.handleApplicationException(
+					new ApplicationException(ex, env.getProperty("spring.application.name")));
+		} finally {
+		}
+
+		return edi270;
+
+	}
+
+	/**
+	 * Sets the contents of current loop or segment using datalist populated from
+	 * parsing method.
+	 * 
+	 * @param edi270
+	 * @param stcounter
+	 * @param hlcounter
+	 * @param currentsegment
+	 * @param datalist
+	 * @param currentloop
+	 * @param currentst
+	 * @return
+	 */
+	public Edi270_271 updateSegment(Edi270_271 edi270, int stcounter, int svccounter, int hlcounter,
+			String currentsegment, List<String> datalist, List<String> compositelist, String currentloop,
+			ST currentst) {
+
+		try {
+
+			if (hlcounter == 0) {
+				switch (currentsegment) {
+				case "ISA":
+					edi270 = mapper.mapIsa(edi270, datalist);
+					break;
+				case "GS":
+					edi270 = mapper.mapGs(edi270, datalist);
+					break;
+				case "ST":
+					currentst = mapper.mapSt(currentst, datalist);
+					edi270.getStlist().add(currentst);
+					break;
+				case "SE":
+					edi270 = mapper.mapSe(edi270, stcounter - 1, datalist);
+					break;
+				case "BHT":
+					edi270 = mapper.mapBht(edi270, stcounter - 1, datalist);
+					break;
+				case "GE":
+					edi270 = mapper.mapGe(edi270, datalist);
+					break;
+				case "IEA":
+					edi270 = mapper.mapIea(edi270, datalist);
+					break;
+				}
+			} else {
+				switch (currentloop) {
+				case "Loop2000A":
+					edi270 = mapper.mapLoop2000A(edi270, stcounter - 1, datalist, currentsegment);
+					break;
+				case "Loop2000B":
+					edi270 = mapper.mapLoop2000B(edi270, stcounter - 1, datalist, currentsegment);
+					break;
+				case "Loop2000C":
+					edi270 = mapper.mapLoop2000C(edi270, stcounter - 1, datalist, currentsegment);
+					break;
+//				case "Loop2000D":
+//					edi276 = mapper.mapLoop2000D(edi276, stcounter - 1, datalist, currentsegment);
+//					break;
+				case "Loop2110C":
+					edi270 = mapper.mapLoop2110C(edi270, stcounter - 1, svccounter - 1, datalist, compositelist,
+							currentsegment);
+				break;
+				}
+			}
+		} catch (Exception ex) {
+			CustomExceptionHandler.handleApplicationException(
+					new ApplicationException(ex, env.getProperty("spring.application.name")));
+		}
+
+		return edi270;
+	}
+
+	/**
+	 * Sets current loop.
+	 * 
+	 * @param hlcounter
+	 * @return
+	 */
+	public String getLoop(int hlcounter) {
+		String loop = "";
+		try {
+
+			switch (hlcounter) {
+			case 1:
+				loop = "Loop2000A";
+				break;
+			case 2:
+				loop = "Loop2000B";
+				break;
+			case 3:
+				loop = "Loop2000C";
+				break;
+//			case 4:
+//				loop = "Loop2000D";
+//				break;
+			}
+		} catch (Exception ex) {
+			CustomExceptionHandler.handleApplicationException(
+					new ApplicationException(ex, env.getProperty("spring.application.name")));
+		}
+		return loop;
+	}
+
+}

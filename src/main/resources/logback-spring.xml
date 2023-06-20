@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TODO: how do we specifiy profile name? -->
+<!-- TODO: how do we specifiy profile name? -->
+<configuration>
+    <property name="LOG_PATTERN" value="%d [%thread] %-5level %logger [%X{txId}] %msg%n" />
+    <springProperty scope="context" name="ACTIVE_PROFILE" source="spring.profiles.active"/>
+
+    <!-- console output is redirected to catalina.out -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+	
+	<appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${CATALINA_BASE}/logs/app.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        	<fileNamePattern>${CATALINA_BASE}/logs/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+        	<!-- each archived file size max -->
+			<maxFileSize>250MB</maxFileSize>
+			<!-- number of files to keep on file system -->
+			<maxHistory>14</maxHistory>
+			<!-- max total size of all archive files -->
+			<totalSizeCap>3GB</totalSizeCap>
+		</rollingPolicy>
+	    <encoder>
+    		<pattern>${LOG_PATTERN}</pattern>
+    	</encoder>
+	</appender>
+
+	<appender name="FILE-ROLLING-ERRORS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${CATALINA_BASE}/logs/appexception.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        	<fileNamePattern>${CATALINA_BASE}/logs/appexception.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+        	<!-- each archived file size max -->
+			<maxFileSize>250MB</maxFileSize>
+			<!-- number of files to keep on file system -->
+			<maxHistory>14</maxHistory>
+			<!-- max total size of all archive files -->
+			<totalSizeCap>3GB</totalSizeCap>
+		</rollingPolicy>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+        	<level>WARN</level>
+    	</filter>
+		<filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+    		<evaluator class="ch.qos.logback.classic.boolex.JaninoEventEvaluator">
+        		<expression>return logger.startsWith("com.abcbs");</expression>
+    		</evaluator>
+		  	<onMatch>ACCEPT</onMatch>
+		</filter>    	
+	
+	    <encoder>
+    		<pattern>${LOG_PATTERN}</pattern>
+    	</encoder>
+	</appender>
+	        
+    <!-- NOTE: smtp appender requires javax.mail and javax.activation pom dependencies -->
+    <!-- NOTE: evalulator requires janino pom dependency -->
+
+    <!-- only warnings go here -->
+    <!-- do we want to write this to a file instead and schedule a daily job to check it? -->
+	<appender name="SMTP" class="ch.qos.logback.classic.net.SMTPAppender">
+	    <smtpHost>MAIL.ABCBS.NET</smtpHost>
+	    <!-- one or more recipients are possible -->
+	    <to>mlwood@arkbluecross.com</to>
+	    <from>mlwood@arkbluecross.com</from>
+	    <subject>270/271 Warning on ${ACTIVE_PROFILE}</subject>
+	    <layout class="ch.qos.logback.classic.PatternLayout">
+	        <pattern>${LOG_PATTERN}</pattern>
+	    </layout>
+	    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+        	<level>WARN</level>
+    	</filter>	    
+    	<filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+        </filter>
+        
+    	<evaluator class="ch.qos.logback.classic.boolex.JaninoEventEvaluator">
+        	<expression>return logger.startsWith("com.abcbs");</expression>
+    	</evaluator>
+    	
+    </appender>    
+     
+    <springProfile name="dev">
+        <logger name="com.abcbs" level="TRACE"/>
+        <root level="INFO">
+            <appender-ref ref="FILE-ROLLING"/>
+            <appender-ref ref="FILE-ROLLING-ERRORS"/>            
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="integration">
+        <logger name="com.abcbs" level="DEBUG"/>
+        <root level="INFO">
+            <appender-ref ref="FILE-ROLLING"/>
+            <appender-ref ref="FILE-ROLLING-ERRORS"/>             
+        </root>
+    </springProfile>
+    
+    <springProfile name="staging">
+        <logger name="com.abcbs" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="FILE-ROLLING"/>
+            <appender-ref ref="FILE-ROLLING-ERRORS"/>             
+        </root>
+    </springProfile>
+    
+    <springProfile name="prod">
+        <logger name="com.abcbs" level="INFO"/>
+        <root level="WARN">
+            <appender-ref ref="FILE-ROLLING"/>
+            <appender-ref ref="FILE-ROLLING-ERRORS"/>             
+        </root>
+    </springProfile>
+     
+    <springProfile name="default">
+        <logger name="com.abcbs" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="FILE-ROLLING"/>
+            <appender-ref ref="FILE-ROLLING-ERRORS"/>             
+        </root>
+    </springProfile>
+
+</configuration>

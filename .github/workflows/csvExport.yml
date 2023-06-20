@@ -1,0 +1,19 @@
+name: Gather data for Flat Data
+on:
+  schedule:
+    - cron: '30 22 * * 1'  # Weekly at 22:30 UTC on Mondays
+  workflow_dispatch:
+jobs:
+  data_gathering:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CSV export
+        uses: advanced-security/ghas-to-csv@v2
+        #env:
+        #  GITHUB_PAT: ${{ secrets.PAT }}  # needed if not running against the current repository
+      - name: Upload CSV
+        uses: actions/upload-artifact@v3
+        with:
+          name: ghas-data
+          path: ${{ github.workspace }}/*.csv
+          if-no-files-found: error
