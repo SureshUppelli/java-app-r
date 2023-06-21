@@ -3,7 +3,7 @@ stages:
 
 fossa_analysis:
   stage: fossa_analysis
-  image: fossa/fossa-cli:latest
+  image: fossa/fossa-cli
   script:
     - fossa init            # Initializes FOSSA in the project directory
     - fossa analyze         # Runs the FOSSA analysis
