@@ -3,7 +3,7 @@ test:
   image: ubuntu:latest
   script:
   - apt update
-  - apt install curl
+  - apt install curl -y
   - - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh
       | bash'
   - export FOSSA_API_KEY=3a3c184d4cf24b14c923028df7956ce7
