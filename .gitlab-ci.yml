@@ -1,5 +1,5 @@
 ---
-test:
+fossa-test:
   image: ubuntu:latest
   script:
   - apt update
