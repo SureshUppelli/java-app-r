@@ -7,6 +7,6 @@ fossa-scan:
   - - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh
       | bash'
   - export FOSSA_API_KEY=$FOSSA_KEY
-  
+  - fossa test
   - [ "fossa analyze" ]
   - ["echo $CI_BUILDS_DIR $CI_PROJECT_NAME"]
