@@ -8,5 +8,5 @@ test:
       | bash'
   - export FOSSA_API_KEY=$FOSSA_KEY
   - fossa init
-  - [ "fossa analyze --title $CI_PROJECT_NAME" ]
+  - [ "fossa analyze --title Java-APP" ]
   - ["echo $CI_BUILDS_DIR $CI_PROJECT_NAME"]
