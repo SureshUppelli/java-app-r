@@ -4,11 +4,10 @@ stages:
 fossa_analysis:
   stage: fossa_analysis
   image: ubuntu:latest
-  before_script:
+  script:
     - apt update
     - apt install curl
     - curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh | bash
     - export FOSSA_API_KEY=3a3c184d4cf24b14c923028df7956ce7
-  script:
     - fossa init            # Initializes FOSSA in the project directory
     - fossa analyze         # Runs the FOSSA analysis
