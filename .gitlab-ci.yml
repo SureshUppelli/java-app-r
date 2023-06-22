@@ -9,4 +9,4 @@ fossa-scan:
   - export FOSSA_API_KEY=$FOSSA_KEY
   
   - [ "fossa analyze" ]
-  - ["echo $CI_BUILDS_DIR $CI_PROJECT_NAME"]
+  
