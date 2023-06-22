@@ -8,4 +8,4 @@ test:
       | bash'
   - export FOSSA_API_KEY=$FOSSA_KEY
   - fossa init
-  - fossa analyze --title $CI_PROJECT_NAME
+  - fossa analyze --title $CI_BUILDS_DIR
