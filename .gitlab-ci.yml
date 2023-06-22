@@ -1,8 +1,5 @@
-stages:
-  - fossa_analysis
-
 fossa_analysis:
-  stage: fossa_analysis
+  
   image: ubuntu:latest
   script:
     - apt update
