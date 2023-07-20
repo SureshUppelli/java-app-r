@@ -1,6 +1,4 @@
 ---
-
-
 scan:
   stage: scan
   script:

@@ -35,7 +35,7 @@ vendoredDependencies:
 targets:
   only:
     - type: maven
-      path: foo/bar
+      path: src/
   exclude:
     - type: bundler
 
