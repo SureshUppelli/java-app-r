@@ -13,6 +13,11 @@ build:
     # Add your build commands here
     - mvn clean package
 scan:
-  stage: scan
+  stage: 
+  before_script:
+  - apt update
+  - apt install curl -y
+  - - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh
+      | bash'
   script:
     - fossa analyze
