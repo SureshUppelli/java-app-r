@@ -1,14 +1,5 @@
 ---
-fossa-scan:
-  image: ubuntu:latest
-  script:
-  - apt update
-  - apt install curl -y
-  - - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh
-      | bash'
-  - export FOSSA_API_KEY=$FOSSA_KEY
-  
-  - [ "fossa analyze" ]
+
 
 scan:
   stage: scan
