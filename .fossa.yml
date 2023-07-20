@@ -1,0 +1,50 @@
+version: 3
+
+server: https://app.fossa.com
+apiKey: a1b2c3
+
+project:
+  id: github.com/fossas/fossa-cli
+  name: fossa-cli
+  team: cli-team
+  policy: custom-cli-policy
+  link: fossa.com
+  url: github.com/fossas/fossa-cli
+  jiraProjectKey: jira-key
+  releaseGroup:
+    name: release-group-name
+    release: 123-release-candidate
+  labels:
+    - project-label-1
+    - test-project
+
+revision:
+  commit: "12345"
+  branch: master
+
+vendoredDependencies:
+  forceRescans: false
+  scanMethod: CLILicenseScan
+  licenseScanPathFilters:
+    only:
+      - "**/*.rb"
+    exclude:
+      - ".git/**"
+      - "test/**/*.rb"
+
+targets:
+  only:
+    - type: maven
+      path: foo/bar
+  exclude:
+    - type: bundler
+
+paths:
+  only:
+    - ./vendor/django
+    - ./test
+  exclude:
+    - ./vendor/django/test
+
+telemetry:
+  scope: full
