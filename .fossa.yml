@@ -4,13 +4,13 @@ server: https://app.fossa.com
 apiKey: 3a3c184d4cf24b14c923028df7956ce7
 
 project:
-  id: github.com/fossas/fossa-cli
-  name: fossa-cli
+  id: gitlab.com/sivasaiganesh/java-app-r
+  name: Java-App
   team: cli-team
   policy: custom-cli-policy
   link: fossa.com
-  url: github.com/fossas/fossa-cli
-  jiraProjectKey: jira-key
+  url: gitlab.com/sivasaiganesh/java-app-r
+  
   releaseGroup:
     name: release-group-name
     release: 123-release-candidate
@@ -19,8 +19,8 @@ project:
     - test-project
 
 revision:
-  commit: "12345"
-  branch: master
+  
+  branch: main
 
 vendoredDependencies:
   forceRescans: false
@@ -35,7 +35,7 @@ vendoredDependencies:
 targets:
   only:
     - type: maven
-      path: src/
+      path: src/main/
   exclude:
     - type: bundler
 

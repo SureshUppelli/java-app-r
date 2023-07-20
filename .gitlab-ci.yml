@@ -1,6 +1,13 @@
 ---
 stages:
+  - build
   - scan
+
+build:
+  stage: build
+  script:
+    # Add your build commands here
+    - mvn clean package
 scan:
   stage: scan
   script:
