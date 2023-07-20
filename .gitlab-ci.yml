@@ -3,4 +3,3 @@ scan:
   stage: scan
   script:
     - fossa analyze
-  
