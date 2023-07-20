@@ -1,7 +1,7 @@
 version: 3
 
 server: https://app.fossa.com
-apiKey: a1b2c3
+apiKey: 3a3c184d4cf24b14c923028df7956ce7
 
 project:
   id: github.com/fossas/fossa-cli
