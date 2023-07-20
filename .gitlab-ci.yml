@@ -5,6 +5,10 @@ stages:
 
 build:
   stage: build
+  before_script:
+  - apt-get update -qy
+  - apt-get install -y maven
+
   script:
     # Add your build commands here
     - mvn clean package
