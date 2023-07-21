@@ -2,22 +2,19 @@
 variables:
   FOSSA_CLI_VERSION: "latest"
   FOSSA_API_KEY: ${{ secrets.FOSSA_KEY }}
-
   
-
 stages:
-  #- build
+  - build
   - fossa-scan
 
-#build:
- # stage: build
-  #before_script:
-  #- apt-get update -qy
-  #- apt-get install -y maven
-  
+build:
+  stage: build
+  before_script:
+  - apt-get update -qy
+  - apt-get install -y maven
+  script:
+  - mvn clean package
 
-  #script:
-  #- mvn clean package
 fossa-scan:
   stage: fossa-scan
   before_script:
@@ -26,8 +23,9 @@ fossa-scan:
       | bash'
   #- 'curl -H "Authorization: Bearer $FOSSA_API_KEY" https://api.fossa.com/s/analyze.sh | bash'
   - export FOSSA_API_KEY=$FOSSA_KEY
-  - echo "$FOSSA_YML_CONTENT" > .fossa.yml
+  
   script:
+  - echo "$FOSSA_YML_CONTENT" > .fossa.yml
   - fossa analyze
   artifacts:
     paths:
