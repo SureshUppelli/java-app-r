@@ -3,7 +3,9 @@ project_type: maven
 
 language: java
 package_manager: maven
-
+revision:
+  #commit: "12345"
+  branch: main
 # Specify the location of your source code and package file.
 # If not specified, Fossa will try to infer them.
 source_root: src/main/java
@@ -11,7 +13,7 @@ package_file: pom.xml
 
 project:
   name: Java-Application
-  team: analytic-team
+  #team: analytic-team
 analysis:
   exclude:
     - "/builds/sivasaiganesh/java-app-r/src/test/"
