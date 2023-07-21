@@ -1,50 +1,22 @@
-version: 3
+version: 1
+project_type: maven
 
-server: https://app.fossa.com
-apiKey: 3a3c184d4cf24b14c923028df7956ce7
+# Specify the language and package manager used in your project
+language: java
+package_manager: maven
 
-project:
-  id: gitlab.com/sivasaiganesh/java-app-r
-  name: Java-App
-  team: cli-team
-  policy: custom-cli-policy
-  link: fossa.com
-  url: gitlab.com/sivasaiganesh/java-app-r
-  
-  releaseGroup:
-    name: release-group-name
-    release: 123-release-candidate
-  labels:
-    - project-label-1
-    - test-project
+# Specify the location of your source code and package file.
+# If not specified, Fossa will try to infer them.
+# source_root: src/main/java
+# package_file: pom.xml
 
-revision:
-  
-  branch: main
+# You can configure the analysis settings to include or exclude specific files or directories
+analysis:
+  include:
+    - "/builds/sivasaiganesh/java-app-r/"  # Adjust the path to the Maven project directory if needed
 
-vendoredDependencies:
-  forceRescans: false
-  scanMethod: CLILicenseScan
-  licenseScanPathFilters:
-    only:
-      - "**/*.rb"
-    exclude:
-      - ".git/**"
-      - "test/**/*.rb"
+# Specify any additional build commands or environment setup if needed
+# build_commands:
+#   - mvn clean package
 
-targets:
-  only:
-    - type: maven
-      path: src/main/
-  exclude:
-    - type: bundler
-
-paths:
-  only:
-    - ./vendor/django
-    - ./test
-  exclude:
-    - ./vendor/django/test
-
-telemetry:
-  scope: full
+# ... (other configuration options)
