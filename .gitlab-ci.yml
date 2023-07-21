@@ -27,7 +27,7 @@ fossa-scan:
   script:
   - echo "$FOSSA_YML_CONTENT" > .fossa.yml
   - fossa analyze
-  artifacts:
-    paths:
-      - .fossa.yml
+  #artifacts:
+    #paths:
+      #- .fossa.yml
 
