@@ -6,18 +6,18 @@ variables:
   
 
 stages:
-  - build
+  #- build
   - fossa-scan
 
-build:
-  stage: build
-  before_script:
-  - apt-get update -qy
-  - apt-get install -y maven
+#build:
+ # stage: build
+  #before_script:
+  #- apt-get update -qy
+  #- apt-get install -y maven
   
 
-  script:
-  - mvn clean package
+  #script:
+  #- mvn clean package
 fossa-scan:
   stage: fossa-scan
   before_script:
