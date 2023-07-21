@@ -3,7 +3,7 @@ project_type: maven
 
 analysis:
   exclude:
-    - "/builds/sivasaiganesh/java-app-r/excluded_dir/"
+    - "java-app-r/excluded_dir/"
     - "**/*.txt"
 
 project:
