@@ -16,6 +16,5 @@ build:
     # Add your build commands here
     - mvn clean package
 scan:
-  
   script:
     - fossa analyze
