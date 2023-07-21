@@ -12,6 +12,17 @@ project:
 revision:
   
   branch: master
+
+vendoredDependencies:
+  forceRescans: false
+  scanMethod: CLILicenseScan
+  licenseScanPathFilters:
+    only:
+      - "**/*.java"
+    exclude:
+      - ".git/**"
+      - "test/**/*.java"
+
 targets:
   only:
     - type: maven
