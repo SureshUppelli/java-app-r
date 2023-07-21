@@ -26,6 +26,10 @@ fossa-scan:
       | bash'
   #- 'curl -H "Authorization: Bearer $FOSSA_API_KEY" https://api.fossa.com/s/analyze.sh | bash'
   - export FOSSA_API_KEY=$FOSSA_KEY
+  - echo "$FOSSA_YML_CONTENT" > .fossa.yml
   script:
   - fossa analyze
+  artifacts:
+    paths:
+      - .fossa.yml
 
