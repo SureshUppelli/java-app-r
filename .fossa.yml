@@ -15,6 +15,6 @@ revision:
 targets:
   only:
     - type: maven
-      path: java-app-r/src/
+      path: java-app-r/src/main/java
   exclude:
     - type: bundler
