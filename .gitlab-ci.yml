@@ -13,8 +13,9 @@ build:
       | bash'
 
   script:
-    # Add your build commands here
-    - mvn clean package
+  - mvn clean package
+
+
 scan:
   script:
-    - fossa analyze
+  - fossa analyze
