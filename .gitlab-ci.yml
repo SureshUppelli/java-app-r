@@ -27,7 +27,7 @@ fossa-scan:
   script:
   
   - [ "fossa analyze" ]
-  #artifacts:
-    #paths:
-      #- .fossa.yml
+  artifacts:
+    paths:
+      - .fossa.yml
 
