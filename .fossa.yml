@@ -1,22 +1,13 @@
-version: 1
+version: 3
 project_type: maven
 
-# Specify the language and package manager used in your project
-language: java
-package_manager: maven
-
-# Specify the location of your source code and package file.
-# If not specified, Fossa will try to infer them.
-# source_root: src/main/java
-# package_file: pom.xml
-
-# You can configure the analysis settings to include or exclude specific files or directories
 analysis:
-  include:
-    - "/builds/sivasaiganesh/java-app-r/"  # Adjust the path to the Maven project directory if needed
+  exclude:
+    - "/builds/sivasaiganesh/java-app-r/excluded_dir/"
+    - "**/*.txt"
 
-# Specify any additional build commands or environment setup if needed
-# build_commands:
-#   - mvn clean package
-
-# ... (other configuration options)
+project:
+  language: java
+  packageManager: maven
+  sourceRoot: src/main/java
+  packageFile: pom.xml
