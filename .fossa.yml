@@ -9,6 +9,9 @@ package_manager: maven
 source_root: src/main/java
 package_file: pom.xml
 
+project:
+  name: Java-Application
+  team: Analytics-team
 analysis:
   exclude:
     - "/builds/sivasaiganesh/java-app-r/src/test/"
