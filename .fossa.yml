@@ -1,31 +1,15 @@
-version: 3
-server: https://app.fossa.com
-apiKey: 3a3c184d4cf24b14c923028df7956ce7
+version: 1
+project_type: maven
 
-project:
-  id: https://gitlab.com/sivasaiganesh/java-app-r
-  name: java-app-r
-  team: cli-team
-  policy: custom-cli-policy
-  link: fossa.com
+language: java
+package_manager: maven
 
-revision:
-  
-  branch: master
+# Specify the location of your source code and package file.
+# If not specified, Fossa will try to infer them.
+source_root: src/main/java
+package_file: pom.xml
 
-vendoredDependencies:
-  forceRescans: false
-  scanMethod: CLILicenseScan
-  licenseScanPathFilters:
-    only:
-      - "**/*.java"
-    exclude:
-      - ".git/**"
-      - "test/**/*.java"
-
-targets:
-  only:
-    - type: maven
-      path: src/main/java
+analysis:
   exclude:
-    - type: bundler
+    - "/builds/sivasaiganesh/java-app-r/src/test/"
+    - "**/*.txt"
