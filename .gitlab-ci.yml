@@ -1,21 +1,23 @@
 ---
 stages:
   - build
-  - scan
+  - fossa-scan
 
 build:
   stage: build
   before_script:
   - apt-get update -qy
   - apt-get install -y maven
-  - apt install curl -y
-  - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh
-      | bash'
+  
 
   script:
   - mvn clean package
-
-
-scan:
+fossa-scan:
+  stage: fossa-scan
+  before_script:
+  - apt install curl -y
+  - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh
+      | bash'
   script:
   - fossa analyze
+
