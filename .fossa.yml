@@ -1,13 +1,20 @@
 version: 3
-project_type: maven
-
-analysis:
-  exclude:
-    - "java-app-r/excluded_dir/"
-    - "**/*.txt"
+server: https://app.fossa.com
+apiKey: 3a3c184d4cf24b14c923028df7956ce7
 
 project:
-  language: java
-  packageManager: maven
-  sourceRoot: src/main/java
-  packageFile: pom.xml
+  id: https://gitlab.com/sivasaiganesh/java-app-r
+  name: java-app-r
+  team: cli-team
+  policy: custom-cli-policy
+  link: fossa.com
+
+revision:
+  
+  branch: master
+targets:
+  only:
+    - type: maven
+      path: java-app-r/src/
+  exclude:
+    - type: bundler
