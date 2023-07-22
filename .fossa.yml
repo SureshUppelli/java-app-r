@@ -14,6 +14,9 @@ package_file: pom.xml
 project:
   name: Java-Application
   #team: analytic-team
+  labels:
+    - project-label-1
+    - test-proj
 analysis:
   exclude:
     - "/builds/sivasaiganesh/java-app-r/src/test/"
