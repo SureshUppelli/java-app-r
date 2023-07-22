@@ -12,15 +12,15 @@ source_root: src/main/java
 package_file: pom.xml
 
 project:
-  id: myproj
+  
   #name: Java-Application
   #team: analytic-team
   labels:
     - project-label-1
-    - test-proj
+    - test-project
   url: gitlab.com/sivasaiganesh/java-app-r
   id: gitlab.com/sivasaiganesh/java-app-r
-  name: "fossa-cli"
+  name: "java-app-r"
 analysis:
   exclude:
     - "/builds/sivasaiganesh/java-app-r/src/test/"
