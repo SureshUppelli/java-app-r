@@ -12,6 +12,7 @@ source_root: src/main/java
 package_file: pom.xml
 
 project:
+  id: myproj
   #name: Java-Application
   #team: analytic-team
   labels:
@@ -19,8 +20,7 @@ project:
     - test-proj
   url: gitlab.com/sivasaiganesh/java-app-r
   id: gitlab.com/sivasaiganesh/java-app-r
-  name: 
-    - fossa-cli
+  name: "fossa-cli"
 analysis:
   exclude:
     - "/builds/sivasaiganesh/java-app-r/src/test/"
