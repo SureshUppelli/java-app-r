@@ -19,7 +19,7 @@ fossa-scan:
   stage: fossa-scan
   before_script:
   - apt install curl -y
-  - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh
+  - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-$FOSSA_CLI_VERSION.sh
       | bash'
   #- 'curl -H "Authorization: Bearer $FOSSA_API_KEY" https://api.fossa.com/s/analyze.sh | bash'
   - export FOSSA_API_KEY=$FOSSA_KEY
