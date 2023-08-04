@@ -10,9 +10,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "Test" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "Test" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -29,3 +29,6 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - uses: fossas/fossa-action@main # Use a specific version if locking is preferred
+      with:
+          api-key: 3a3c184d4cf24b14c923028df7956ce7
